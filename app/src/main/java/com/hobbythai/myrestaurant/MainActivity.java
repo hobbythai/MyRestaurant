@@ -20,7 +20,14 @@ public class MainActivity extends AppCompatActivity {
         //create connect database
         createAndConnectedDatabase();
 
+        //tester add value
+        testerAddValue();
+
     }//on create
+
+    private void testerAddValue() {
+        objUserTABLE.addNewUser("testUser", "12345", "kullachat");
+    }
 
     private void createAndConnectedDatabase() {
         objUserTABLE = new UserTABLE(this);
