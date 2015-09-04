@@ -1,12 +1,16 @@
 package com.hobbythai.myrestaurant;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     //explicit
     private UserTABLE objUserTABLE;
     private FoodTABLE objFoodTABLE;
+    private EditText userEditText, passwordEditText;
 
 
 
@@ -32,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //bind widget
+        bindWidget();
 
         //create connect database
         createAndConnectedDatabase();
@@ -47,6 +55,76 @@ public class MainActivity extends AppCompatActivity {
 
 
     }//on create
+
+    private void bindWidget() {
+        userEditText = (EditText) findViewById(R.id.editText);
+        passwordEditText = (EditText) findViewById(R.id.editText2);
+    }
+
+
+    public void clickLogin(View view) {
+
+        String strUser = userEditText.getText().toString().trim();
+        String strPassword = passwordEditText.getText().toString().trim();
+
+        //chk zero
+        if (strUser.equals("") || strPassword.equals("")) {
+
+            //have space
+            errorDialog("Have Space","Please Fill All Blank");
+
+        } else {
+
+            //no space
+            try {
+
+                String[] strMyResult = objUserTABLE.searchUser(strUser);
+                if (strPassword.equals(strMyResult[2])) {
+                    welcomeDialog(strMyResult[3]);
+                } else {
+                    errorDialog("Password False", "Pls Try Again");
+                }
+
+            } catch (Exception e) {
+                errorDialog("ไม่มี User", "ไม่มี "+strUser +"ในฐานข้อมูล");
+            }
+
+        }//if
+
+    }//click login
+
+    private void welcomeDialog(String strName) {
+        AlertDialog.Builder objBuilder = new AlertDialog.Builder(this);
+        objBuilder.setIcon(R.drawable.danger);
+        objBuilder.setTitle("Welcome");
+        objBuilder.setMessage("Welcome" + strName + "\n" + "To Our Shop");
+        objBuilder.setCancelable(false);
+        objBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+    }
+
+    private void errorDialog(String strTitle, String strMessage) {
+
+        AlertDialog.Builder objBuilder = new AlertDialog.Builder(this);
+        objBuilder.setIcon(R.drawable.danger);
+        objBuilder.setTitle(strTitle);
+        objBuilder.setMessage(strMessage);
+        objBuilder.setCancelable(false);
+        objBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        objBuilder.show();
+
+    }//error dialog
+
 
     private void synJASONtoSQLite() {
 
@@ -119,8 +197,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.d("Rest", "Update ==> "+e.toString());
             }
-
-
 
             intTime += 1;
         }//while
