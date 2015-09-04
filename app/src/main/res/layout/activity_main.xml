@@ -10,16 +10,15 @@
         android:orientation="vertical"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="#967aa8f7">
+        android:background="#967aa8f7"
+        android:layout_centerHorizontal="true">
 
         <ImageView
             android:layout_width="@dimen/image"
             android:layout_height="@dimen/image"
             android:id="@+id/imageView"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/logo_carabao48"
-            android:layout_margin="50dp" />
+            android:src="@drawable/logo_carabao48" />
 
         <EditText
             android:layout_width="match_parent"

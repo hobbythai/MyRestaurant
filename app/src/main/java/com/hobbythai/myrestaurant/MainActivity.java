@@ -2,6 +2,7 @@ package com.hobbythai.myrestaurant;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -88,12 +89,11 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 errorDialog("ไม่มี User", "ไม่มี "+strUser +"ในฐานข้อมูล");
             }
-
         }//if
 
     }//click login
 
-    private void welcomeDialog(String strName) {
+    private void welcomeDialog(final String strName) {
         AlertDialog.Builder objBuilder = new AlertDialog.Builder(this);
         objBuilder.setIcon(R.drawable.danger);
         objBuilder.setTitle("Welcome");
@@ -102,9 +102,18 @@ public class MainActivity extends AppCompatActivity {
         objBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                Intent objIntent = new Intent(MainActivity.this, OrderActivity.class);
+                objIntent.putExtra("Officer", strName);
+                startActivity(objIntent);
+
+                finish();
+
                 dialogInterface.dismiss();
             }
         });
+
+        objBuilder.show();
 
     }
 

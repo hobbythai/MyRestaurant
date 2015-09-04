@@ -46,12 +46,14 @@ public class UserTABLE {
                     strResult[3] = objCursor.getString(3);
                 }
             }
+            objCursor.close();
+            return strResult;
 
         } catch (Exception e) {
             return null;
         }
 
-        return new String[0];
+       // return new String[0];
     }
 
 
